@@ -1,18 +1,28 @@
-const peso = 75;
-const altura = 1.73;
+function calcularImc(peso, altura){
+    return peso / Math.pow(altura, 2);
+}
 
-const IMC = peso / Math.pow(altura, 2);
-console.log(IMC)
 
+function classificarImc(IMC) {
 if (IMC < 18.5) {
-    console.log("Abaixo do peso");
+    return 'baixo do peso';
 } else if (IMC >= 18.5 && IMC < 25) {
-    console.log("Peso normal");
+    return 'Peso normal';
 } else if (IMC >= 25 && IMC < 30) {
-    console.log("Acima do peso");
+    return 'Acima do peso';
 } else if (IMC >= 30 && IMC < 40) {
-    console.log("Obeso")
+    return 'Obeso';
+}else {
+    return 'Obesidade grave';
+    } 
 }
-else {
-    console.log("Obesidade grave")
-}
+
+//Main,  codigo principal
+(function (){  //Dessa forma a função é criada e ja se auto executa sem precisar ser chamada novamente 
+    const peso = 75;
+    const altura = 1.75;
+    
+    const IMC = calcularImc(peso, altura);
+    console.log(classificarImc(IMC));
+})();
+
