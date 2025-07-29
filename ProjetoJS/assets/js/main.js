@@ -2,10 +2,51 @@ const offset = 0
 const limit = 10
 const url = `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
 
-//Fetch retorna uma Promise
+const pokemonList = document.getElementById('pokemonList')
+
+// Função para converter os dados detalhados de um Pokémon em HTML
+function convertPokemonToLi(pokemon) {
+    const number = pokemon.id.toString().padStart(3, '0')
+    const types = pokemon.types
+        .map(typeSlot => `<li class="type">${typeSlot.type.name}</li>`)
+        .join('')
+
+    const imgUrl = pokemon.sprites.other['dream_world'].front_default || 
+                   pokemon.sprites.other['official-artwork'].front_default || 
+                   pokemon.sprites.front_default || ''
+
+    return `
+        <li class="pokemon">
+            <span class="number">#${number}</span>
+            <span class="name">${pokemon.name}</span>
+
+            <div class="detail">
+                <ol class="types">
+                    ${types}
+                </ol>
+                <img src="${imgUrl}" alt="${pokemon.name}">
+            </div>
+        </li>
+    `
+}
+
+// Função principal
 fetch(url)
-    //utilizando arrow function "=>", com encadeamento de THEN, o primeiro then vem do retorno da PROMISE,
-    //o segundo then, vem do retorno do primeiro e por ultimo o error
-    .then((response) => response.json())
-    .then((jsonBody) => console.log(jsonBody))// Atraves desse Json de resposta conseguimos manipular o body
-    .catch((error) => console.error(error))
+    .then(response => response.json())
+    .then(jsonBody => {
+        const pokemons = jsonBody.results
+
+        // Para cada Pokémon, buscar os dados completos e exibir
+        return Promise.all(
+            pokemons.map(pokemon => 
+                fetch(pokemon.url)
+                    .then(response => response.json())
+            )
+        )
+    })
+    .then(detailedPokemons => {
+        // Montar todos os HTMLs e adicionar de uma vez só
+        const newHtml = detailedPokemons.map(convertPokemonToLi).join('')
+        pokemonList.innerHTML = newHtml
+    })
+    .catch(error => console.error(error))
