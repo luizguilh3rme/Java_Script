@@ -30,21 +30,7 @@ function convertPokemonToLi(pokemon) {
     `
 }
 
-// Função principal
-fetch(url)
-    .then(response => response.json())
-    .then(jsonBody => {
-        const pokemons = jsonBody.results
-
-        // Para cada Pokémon, buscar os dados completos e exibir
-        return Promise.all(
-            pokemons.map(pokemon => 
-                fetch(pokemon.url)
-                    .then(response => response.json())
-            )
-        )
-    })
-    .then(detailedPokemons => {
+    pokeApi.getPokemons().then(detailedPokemons => {
         // Montar todos os HTMLs e adicionar de uma vez só
         const newHtml = detailedPokemons.map(convertPokemonToLi).join('')
         pokemonList.innerHTML = newHtml
