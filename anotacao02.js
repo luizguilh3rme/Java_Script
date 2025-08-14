@@ -11,7 +11,9 @@ const guilherme = {
 
 console.log(guilherme.genero)
 
+//-----------------------------//
 
+// Praticando a função "Prototype" para criar function nos objetos
 function Pessoa(nome, idade){
     this.nome = nome
     this.idade = idade
@@ -22,4 +24,5 @@ Pessoa.prototype.falar = function(){
 }
 
 const guilherme2 = new Pessoa('Guilherme', 20)
-console.log(guilherme2)
+guilherme2.falar()
+
